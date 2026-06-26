@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 120">
+  <g transform="translate(8, 5)">
+    <!-- Top petal (teal, vertical capsule) -->
+    <rect x="18" y="0" width="26" height="52" rx="13" fill="#3BB8A8"/>
+
+    <!-- Left petal (dark teal, horizontal capsule) -->
+    <rect x="-4" y="42" width="52" height="26" rx="13" fill="#2A9D8F"/>
+
+    <!-- Top-right petal (yellow-green, angled up-right) -->
+    <rect x="28" y="14" width="52" height="26" rx="13" fill="#C9D835" transform="rotate(-18 54 27)"/>
+
+    <!-- Bottom-right petal (yellow-green, angled down-right) -->
+    <rect x="28" y="68" width="52" height="26" rx="13" fill="#BDCC2B" transform="rotate(18 54 81)"/>
+
+    <!-- Bottom-left petal (darker teal, vertical capsule) -->
+    <rect x="18" y="58" width="26" height="52" rx="13" fill="#2A9D8F"/>
+
+    <!-- White cross lines to separate petals -->
+    <line x1="-5" y1="56" x2="90" y2="50" stroke="white" stroke-width="6.5"/>
+    <line x1="34" y1="-5" x2="30" y2="115" stroke="white" stroke-width="6.5"/>
+  </g>
+
+  <!-- Kemenkes text -->
+  <text x="108" y="52" font-family="'Nunito', 'Segoe UI', 'Trebuchet MS', sans-serif" font-size="46" font-weight="700" fill="#5CC8C8" letter-spacing="0">Kemenkes</text>
+
+  <!-- BKK TARAKAN text -->
+  <text x="108" y="100" font-family="'Nunito', 'Segoe UI', 'Trebuchet MS', sans-serif" font-size="40" font-weight="800" fill="#D9A23B" letter-spacing="2.5">BKK TARAKAN</text>
+</svg>

@@ -1,0 +1,37 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(run)",
+      "Skill(run:*)",
+      "PowerShell(Get-Process httpd -ErrorAction SilentlyContinue)",
+      "PowerShell(Get-Process mysqld -ErrorAction SilentlyContinue)",
+      "PowerShell(Start-Process \"http://localhost/sicapin-laravel/public\")",
+      "PowerShell(Start-Process \"http://localhost/sicapin-laravel/public/sertifikat/rekap\")",
+      "PowerShell(Start-Process \"http://localhost/sicapin-laravel/public/sertifikat/rekap-jenis\")",
+      "PowerShell(cd c:\\\\xampp\\\\htdocs\\\\sicapin-laravel; $link = Get-Item public\\\\storage -ErrorAction SilentlyContinue; if \\($link\\) { \"$\\($link.Attributes\\) -> $\\($link.Target\\)\" } else { \"NO SYMLINK\" })",
+      "PowerShell(cd c:\\\\xampp\\\\htdocs\\\\sicapin-laravel; @\\(\"1782352934_REKAP_RPL_JANUARI_2026_TARAKAN.pdf\",\"69ace947a6c1a.pdf\",\"69ae4ef1693cd.pdf\",\"69af9f61671d9.pdf\",\"69b0c296d3f40.pdf\"\\) | ForEach-Object { $exists = Test-Path \"storage\\\\app\\\\public\\\\sertifikat\\\\$_\"; \"$_ -> exists: $exists\" })",
+      "PowerShell(cd c:\\\\xampp\\\\htdocs\\\\sicapin-laravel; c:\\\\xampp\\\\php\\\\php.exe artisan tinker --execute=\"$all = \\\\App\\\\Models\\\\Sertifikat::whereNotNull\\('pdf'\\)->where\\('pdf','!=',''\\)->get\\(['id','pdf']\\); $missing = 0; $found = 0; foreach \\($all as $s\\) { $path = storage_path\\('app/public/sertifikat/' . $s->pdf\\); if \\(!file_exists\\($path\\)\\) { $missing++; echo 'MISSING id=' . $s->id . ' file=' . $s->pdf . chr\\(10\\); } else { $found++; } } echo chr\\(10\\) . 'Total=' . $all->count\\(\\) . ' Found=' . $found . ' Missing=' . $missing;\")",
+      "PowerShell(c:\\\\xampp\\\\php\\\\php.exe \"C:\\\\Users\\\\BKKTAR~1\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--xampp-htdocs-sicapin-laravel\\\\8c83254d-39c6-41c2-b096-b8568b0a1e30\\\\scratchpad\\\\check_pdf.php\")",
+      "PowerShell(Remove-Item c:\\\\xampp\\\\htdocs\\\\sicapin-laravel\\\\check_pdf.php -Confirm:$false)",
+      "PowerShell(cd c:\\\\xampp\\\\htdocs\\\\sicapin-laravel; c:\\\\xampp\\\\php\\\\php.exe -r \"$s = require 'vendor/autoload.php'; $app = require 'bootstrap/app.php'; $app->make\\('Illuminate\\\\Contracts\\\\Console\\\\Kernel'\\)->bootstrap\\(\\); $s = App\\\\Models\\\\Sertifikat::whereNotNull\\('pdf'\\)->latest\\(\\)->first\\(\\); echo 'id=' . $s->id . ' pdf=' . $s->pdf . chr\\(10\\); $path = storage_path\\('app/public/sertifikat/' . $s->pdf\\); echo 'path=' . $path . chr\\(10\\); echo 'exists=' . \\(file_exists\\($path\\) ? 'YES' : 'NO'\\) . chr\\(10\\); if\\(file_exists\\($path\\)\\) echo 'size=' . filesize\\($path\\);\")",
+      "PowerShell(cd c:\\\\xampp\\\\htdocs\\\\sicapin-laravel; try { [System.IO.File]::WriteAllText\\(\"storage\\\\app\\\\public\\\\sertifikat\\\\test_write.txt\", \"test\"\\); Remove-Item \"storage\\\\app\\\\public\\\\sertifikat\\\\test_write.txt\" -Confirm:$false; \"WRITABLE\" } catch { \"NOT WRITABLE: $_\" })",
+      "PowerShell(cd c:\\\\xampp\\\\htdocs\\\\sicapin-laravel; $src = \"storage\\\\app\\\\private\\\\public\\\\sertifikat\"; $dst = \"storage\\\\app\\\\public\\\\sertifikat\"; if \\(Test-Path $src\\) { $files = Get-ChildItem $src -File; $count = 0; foreach \\($f in $files\\) { $target = Join-Path $dst $f.Name; if \\(-not \\(Test-Path $target\\)\\) { Move-Item $f.FullName $target; $count++ } }; \"Moved $count files\" } else { \"Source dir not found\" })",
+      "PowerShell(cd c:\\\\xampp\\\\htdocs\\\\sicapin-laravel; if \\(\\(Get-ChildItem \"storage\\\\app\\\\private\\\\public\\\\sertifikat\" -ErrorAction SilentlyContinue | Measure-Object\\).Count -eq 0\\) { Remove-Item \"storage\\\\app\\\\private\\\\public\" -Recurse -Force -Confirm:$false; \"Cleaned up\" } else { \"Still has files\" })",
+      "PowerShell(Start-Process \"http://localhost/sicapin-laravel/public/sertifikat\")",
+      "PowerShell(cd c:\\\\xampp\\\\htdocs\\\\sicapin-laravel; if \\(-not \\(Test-Path \"resources\\\\views\\\\jenis-pelatihan\"\\)\\) { New-Item -ItemType Directory -Path \"resources\\\\views\\\\jenis-pelatihan\" -Force })",
+      "PowerShell(Start-Process \"http://localhost/sicapin-laravel/public/jenis-pelatihan\")",
+      "PowerShell(& \"C:\\\\xampp\\\\php\\\\php.exe\" -l \"C:\\\\xampp\\\\htdocs\\\\sicapin-laravel\\\\app\\\\Http\\\\Controllers\\\\HomeController.php\")",
+      "PowerShell(& \"C:\\\\xampp\\\\php\\\\php.exe\" -l \"C:\\\\xampp\\\\htdocs\\\\sicapin-laravel\\\\resources\\\\views\\\\home\\\\index.blade.php\")",
+      "PowerShell(Start-Process \"http://localhost/sicapin-laravel/public/sertifikat/download\")",
+      "PowerShell(cd c:\\\\xampp\\\\htdocs\\\\sicapin-laravel; if \\(-not \\(Test-Path \"public\\\\images\"\\)\\) { New-Item -ItemType Directory -Path \"public\\\\images\" -Force })",
+      "PowerShell(Start-Process \"http://localhost/sicapin-laravel/public/login\")",
+      "PowerShell(Start-Process \"http://localhost/sicapin-laravel/public/?periode=triwulan2\")",
+      "PowerShell(Start-Process \"http://localhost/sicapin-laravel/public/?periode=bulan6\")",
+      "PowerShell(& C:\\\\xampp\\\\php\\\\php.exe -l C:\\\\xampp\\\\htdocs\\\\sicapin-laravel\\\\app\\\\Http\\\\Controllers\\\\HomeController.php)",
+      "PowerShell(& C:\\\\xampp\\\\php\\\\php.exe -l C:\\\\xampp\\\\htdocs\\\\sicapin-laravel\\\\routes\\\\web.php)",
+      "PowerShell(cd c:\\\\xampp\\\\htdocs\\\\sicapin-laravel; @\\(\"\", \"sertifikat\", \"sertifikat/rekap\", \"sertifikat/rekap-jenis\", \"sertifikat/pending\", \"sertifikat/download\", \"sertifikat/upload\", \"kalender\", \"comparison\", \"pegawai\", \"jenis-pelatihan\", \"profile\", \"sertifikat/live-search?q=test\", \"search?q=test\", \"sertifikat/cetak-pribadi\"\\) | ForEach-Object { try { $r = Invoke-WebRequest -Uri \"http://localhost/sicapin-laravel/public/$_\" -UseBasicParsing -MaximumRedirection 0 -ErrorAction Stop; \"$_ => $\\($r.StatusCode\\)\" } catch { $code = $_.Exception.Response.StatusCode.value__; if \\($code\\) { \"$_ => $code\" } else { \"$_ => ERROR: $\\($_.Exception.Message\\)\" } } })",
+      "PowerShell($r = Invoke-WebRequest -Uri \"http://localhost/sicapin-laravel/public/login\" -UseBasicParsing; \"$\\($r.StatusCode\\) - length: $\\($r.Content.Length\\)\")",
+      "PowerShell(Start-Process \"http://localhost/sicapin-laravel/public/pegawai\")"
+    ]
+  }
+}
