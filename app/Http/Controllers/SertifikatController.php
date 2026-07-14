@@ -1051,7 +1051,8 @@ class SertifikatController extends Controller
 
             $sertifikatList = $sertifikatQuery->get();
 
-            $jplPerJenis = array_fill(0, 25, 0);
+            $jenisCount = count($jenisPelatihan);
+            $jplPerJenis = $jenisCount > 0 ? array_fill(0, $jenisCount, 0) : [];
             foreach ($sertifikatList as $sertifikat) {
                 $index = array_search($sertifikat->jenis_pelatihan, $jenisPelatihan);
                 if ($index !== false) {
