@@ -31,7 +31,18 @@
       "PowerShell(& C:\\\\xampp\\\\php\\\\php.exe -l C:\\\\xampp\\\\htdocs\\\\sicapin-laravel\\\\routes\\\\web.php)",
       "PowerShell(cd c:\\\\xampp\\\\htdocs\\\\sicapin-laravel; @\\(\"\", \"sertifikat\", \"sertifikat/rekap\", \"sertifikat/rekap-jenis\", \"sertifikat/pending\", \"sertifikat/download\", \"sertifikat/upload\", \"kalender\", \"comparison\", \"pegawai\", \"jenis-pelatihan\", \"profile\", \"sertifikat/live-search?q=test\", \"search?q=test\", \"sertifikat/cetak-pribadi\"\\) | ForEach-Object { try { $r = Invoke-WebRequest -Uri \"http://localhost/sicapin-laravel/public/$_\" -UseBasicParsing -MaximumRedirection 0 -ErrorAction Stop; \"$_ => $\\($r.StatusCode\\)\" } catch { $code = $_.Exception.Response.StatusCode.value__; if \\($code\\) { \"$_ => $code\" } else { \"$_ => ERROR: $\\($_.Exception.Message\\)\" } } })",
       "PowerShell($r = Invoke-WebRequest -Uri \"http://localhost/sicapin-laravel/public/login\" -UseBasicParsing; \"$\\($r.StatusCode\\) - length: $\\($r.Content.Length\\)\")",
-      "PowerShell(Start-Process \"http://localhost/sicapin-laravel/public/pegawai\")"
+      "PowerShell(Start-Process \"http://localhost/sicapin-laravel/public/pegawai\")",
+      "WebFetch(domain:sicapin.bkktarakan.id)",
+      "Bash(npm install *)",
+      "Bash(npm run *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(git rev-list *)",
+      "Bash(gh auth *)",
+      "Bash(gh repo *)",
+      "Bash(gh secret *)",
+      "Bash(gh run *)"
     ]
   }
 }

@@ -677,7 +677,7 @@ class SertifikatController extends Controller
         $data = $this->getRincianByPeriode($tahun, $periode);
 
         $pdf = Pdf::loadView('sertifikat.cetak-rincian', compact('data', 'tahun', 'jenisPelatihan', 'periodeLabel'));
-        $pdf->setPaper('a4', 'landscape');
+        $pdf->setPaper('legal', 'landscape');
         return $pdf->download('Rincian_JPL_' . $tahun . '_' . $periode . '.pdf');
     }
 

@@ -157,14 +157,6 @@
             </a>
             @endif
 
-            <a href="{{ route('home.kalender') }}"
-               class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-150
-                      {{ request()->routeIs('home.kalender') ? 'bg-primary-50 text-primary-700' : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900' }}">
-                <svg class="w-5 h-5 {{ request()->routeIs('home.kalender') ? 'text-primary-600' : 'text-gray-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                </svg>
-                Kalender Pelatihan
-            </a>
 
             <a href="{{ route('home.comparison') }}"
                class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-150
@@ -394,57 +386,73 @@
         </footer>
     </div>
 
-{{-- Toast Notifications --}}
-<div class="fixed top-4 right-4 z-[100] space-y-2 print:hidden" id="toast-container">
+{{-- SweetAlert2 Notifications & Confirm Override --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 4000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+    });
+
     @if(session('success'))
-    <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 4000)"
-         x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-x-8" x-transition:enter-end="opacity-100 translate-x-0"
-         x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-x-0" x-transition:leave-end="opacity-0 translate-x-8"
-         class="flex items-center gap-3 px-4 py-3 bg-white rounded-xl shadow-lg border border-green-200 min-w-[300px] max-w-md">
-        <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-            <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-        </div>
-        <p class="text-sm text-gray-700 flex-1">{{ session('success') }}</p>
-        <button @click="show = false" class="text-gray-400 hover:text-gray-600 flex-shrink-0"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
-    </div>
+        Toast.fire({ icon: 'success', title: '{{ session('success') }}' });
     @endif
+    
     @if(session('error'))
-    <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 6000)"
-         x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-x-8" x-transition:enter-end="opacity-100 translate-x-0"
-         x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-x-0" x-transition:leave-end="opacity-0 translate-x-8"
-         class="flex items-center gap-3 px-4 py-3 bg-white rounded-xl shadow-lg border border-red-200 min-w-[300px] max-w-md">
-        <div class="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0">
-            <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        </div>
-        <p class="text-sm text-gray-700 flex-1">{{ session('error') }}</p>
-        <button @click="show = false" class="text-gray-400 hover:text-gray-600 flex-shrink-0"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
-    </div>
+        Toast.fire({ icon: 'error', title: '{{ session('error') }}' });
     @endif
+    
     @if(session('info'))
-    <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 4000)"
-         x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-x-8" x-transition:enter-end="opacity-100 translate-x-0"
-         x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-x-0" x-transition:leave-end="opacity-0 translate-x-8"
-         class="flex items-center gap-3 px-4 py-3 bg-white rounded-xl shadow-lg border border-blue-200 min-w-[300px] max-w-md">
-        <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        </div>
-        <p class="text-sm text-gray-700 flex-1">{{ session('info') }}</p>
-        <button @click="show = false" class="text-gray-400 hover:text-gray-600 flex-shrink-0"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
-    </div>
+        Toast.fire({ icon: 'info', title: '{{ session('info') }}' });
     @endif
+    
     @if($errors->any())
-    <div x-data="{ show: true }" x-show="show"
-         x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-x-8" x-transition:enter-end="opacity-100 translate-x-0"
-         x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-x-0" x-transition:leave-end="opacity-0 translate-x-8"
-         class="flex items-start gap-3 px-4 py-3 bg-white rounded-xl shadow-lg border border-red-200 min-w-[300px] max-w-md">
-        <div class="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-            <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        </div>
-        <ul class="text-sm text-gray-700 flex-1 list-disc list-inside">@foreach($errors->all() as $e)<li>{{ $e }}</li>@endforeach</ul>
-        <button @click="show = false" class="text-gray-400 hover:text-gray-600 flex-shrink-0 mt-0.5"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg></button>
-    </div>
+        Swal.fire({
+            icon: 'error',
+            title: 'Terjadi Kesalahan!',
+            html: '<ul class="text-left list-disc list-inside">@foreach($errors->all() as $e)<li>{{ $e }}</li>@endforeach</ul>',
+            confirmButtonText: 'Tutup'
+        });
     @endif
-</div>
+
+    // Global Confirm Override
+    document.querySelectorAll('form').forEach(form => {
+        const onsubmitAttr = form.getAttribute('onsubmit');
+        if (onsubmitAttr && onsubmitAttr.includes('confirm(')) {
+            const match = onsubmitAttr.match(/confirm\(['"](.*?)['"]\)/);
+            if (match) {
+                const message = match[1];
+                form.removeAttribute('onsubmit');
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    Swal.fire({
+                        title: 'Konfirmasi',
+                        text: message,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, lanjutkan!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+            }
+        }
+    });
+});
+</script>
 
 {{-- Session Timeout Warning + Auto-logout --}}
 <div x-data="sessionTimer()" x-show="showWarning" x-cloak class="fixed inset-0 z-[200] flex items-center justify-center bg-black/50 print:hidden">
