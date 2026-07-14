@@ -90,6 +90,7 @@ jobs:
         password: ${{ secrets.FTP_PASSWORD }}
         server-dir: ./
         local-dir: ./deploy_dist/
+        dangerous-clean-slate: true
 
     - name: 🚀 Ekstrak file di Hosting
       run: |
