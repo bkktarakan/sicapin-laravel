@@ -68,10 +68,20 @@ jobs:
 
         } else {
             echo "Gagal membuka file ZIP. ";
-            http_response_code(500);
+          // Jangan hapus file ini agar sinkronisasi FTP tidak rusak
         }
         
-        echo "Cek ENV: " . (file_exists(__DIR__ . '/../.env') ? "ADA" : "TIDAK ADA");
+        echo "Cek ENV: " . (file_exists(__DIR__ . '/../.env') ? "ADA" : "TIDAK ADA") . "<br>";
+        
+        $logFile = __DIR__ . '/../storage/logs/laravel.log';
+        if (file_exists($logFile)) {
+            $logLines = file($logFile);
+            $lastLines = array_slice($logLines, -50);
+            echo "<h3>Log Error Terakhir:</h3><pre>" . htmlspecialchars(implode("", $lastLines)) . "</pre>";
+        } else {
+            echo "File log tidak ditemukan.";
+        }
+        // Hash trigger: v2
         ?>
         EOF
         
