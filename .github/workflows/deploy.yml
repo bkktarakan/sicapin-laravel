@@ -28,12 +28,12 @@ jobs:
 
     - name: 📦 Prepare Deployment Files (ZIP)
       run: |
-        # Buat file unzipper
-        cat << 'EOF' > unzip.php
+        # Buat file unzipper di dalam folder public
+        cat << 'EOF' > public/unzip.php
         <?php
         $zip = new ZipArchive;
-        if ($zip->open('release.zip') === TRUE) {
-            $zip->extractTo(__DIR__);
+        if ($zip->open(__DIR__ . '/../release.zip') === TRUE) {
+            $zip->extractTo(__DIR__ . '/../');
             $zip->close();
             echo "Ekstrak berhasil. ";
         } else {
@@ -41,7 +41,7 @@ jobs:
             http_response_code(500);
         }
         // Hapus jejak
-        @unlink('release.zip');
+        @unlink(__DIR__ . '/../release.zip');
         @unlink(__FILE__);
         ?>
         EOF
@@ -49,10 +49,10 @@ jobs:
         # Zip semua file (kecuali folder git dan file rahasia)
         zip -r release.zip . -x ".git/*" ".github/*" "node_modules/*" "tests/*" "storage/framework/cache/*"
         
-        # Pindahkan ke folder kosong agar FTP hanya mengirim 2 file ini
-        mkdir deploy_dist
+        # Pindahkan ke folder kosong agar FTP hanya mengirim 2 file ini sesuai struktur
+        mkdir -p deploy_dist/public
         mv release.zip deploy_dist/
-        mv unzip.php deploy_dist/
+        mv public/unzip.php deploy_dist/public/
 
     - name: 📂 Sync files via FTP (Hanya 2 File)
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
