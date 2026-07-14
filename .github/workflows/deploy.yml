@@ -70,7 +70,8 @@ jobs:
             echo "Gagal membuka file ZIP. ";
             http_response_code(500);
         }
-        // Jangan hapus file ini agar sinkronisasi FTP tidak rusak
+        
+        echo "Cek ENV: " . (file_exists(__DIR__ . '/../.env') ? "ADA" : "TIDAK ADA");
         ?>
         EOF
         
@@ -90,7 +91,6 @@ jobs:
         password: ${{ secrets.FTP_PASSWORD }}
         server-dir: ./
         local-dir: ./deploy_dist/
-        dangerous-clean-slate: true
 
     - name: 🚀 Ekstrak file di Hosting
       run: |
