@@ -29,7 +29,7 @@ jobs:
     - name: 📦 Prepare Deployment Files (ZIP)
       run: |
         # Buat file unzipper di dalam folder public
-        cat << 'EOF' > public/unzip.php
+        cat << 'EOF' > public/extract.php
         <?php
         $zip = new ZipArchive;
         if ($zip->open(__DIR__ . '/../release.zip') === TRUE) {
@@ -80,7 +80,7 @@ jobs:
         # Pindahkan ke folder kosong agar FTP hanya mengirim 2 file ini sesuai struktur
         mkdir -p deploy_dist/public
         mv release.zip deploy_dist/
-        mv public/unzip.php deploy_dist/public/
+        mv public/extract.php deploy_dist/public/
 
     - name: 📂 Sync files via FTP (Hanya 2 File)
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
@@ -95,4 +95,4 @@ jobs:
       run: |
         # Memanggil file PHP di hosting untuk mengekstrak ZIP
         # Ganti URL ini jika nama domain Anda berbeda
-        curl -sL "https://sicapin.bkktarakan.id/unzip.php"
+        curl -sL "https://sicapin.bkktarakan.id/public/extract.php"
