@@ -32,8 +32,8 @@ jobs:
         server: ${{ secrets.FTP_SERVER }}
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
-        # Isi secret FTP_SERVER_DIR dengan folder tujuan di hosting, contoh: /public_html/
-        server-dir: ${{ secrets.FTP_SERVER_DIR }}
+        # Karena akun FTP Hostinger sudah mengarah ke public_html, kita set server-dir ke root FTP (./)
+        server-dir: ./
         exclude: |
           **/.git*
           **/.git*/**
