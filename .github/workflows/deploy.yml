@@ -31,6 +31,10 @@ jobs:
         # Buat file unzipper di dalam folder public
         cat << 'EOF' > public/extract.php
         <?php
+        ini_set('display_errors', 1);
+        ini_set('display_startup_errors', 1);
+        error_reporting(E_ALL);
+
         $zip = new ZipArchive;
         if ($zip->open(__DIR__ . '/../release.zip') === TRUE) {
             $zip->extractTo(__DIR__ . '/../');
@@ -56,13 +60,13 @@ jobs:
                 try {
                     \Illuminate\Support\Facades\DB::statement("ALTER TABLE pegawai ADD COLUMN aktif TINYINT(1) NOT NULL DEFAULT 1 AFTER level");
                     echo "Kolom aktif berhasil ditambahkan ke tabel pegawai! ";
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     echo "Kolom aktif sudah ada atau gagal ditambahkan (Aman). ";
                 }
 
                 \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
                 echo "Migrasi Selesai: " . \Illuminate\Support\Facades\Artisan::output();
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 echo "Gagal migrasi: " . $e->getMessage();
             }
 
@@ -81,7 +85,7 @@ jobs:
         } else {
             echo "File log tidak ditemukan.";
         }
-        // Hash trigger: v2
+        // Hash trigger: v3
         ?>
         EOF
         
