@@ -15,15 +15,6 @@ use App\Http\Controllers\JenisPelatihanController;
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-// TODO: Hapus route ini setelah migrasi berhasil dijalankan di server
-Route::get('/run-migrations-secret', function () {
-    try {
-        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
-        return "Migrasi berhasil dijalankan! Output: <br>" . nl2br(\Illuminate\Support\Facades\Artisan::output());
-    } catch (\Exception $e) {
-        return "Terjadi error: " . $e->getMessage();
-    }
-});
 // Protected routes
 Route::middleware(['auth', \App\Http\Middleware\CheckTahun::class])->group(function () {
 

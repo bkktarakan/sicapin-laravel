@@ -36,6 +36,27 @@ jobs:
             $zip->extractTo(__DIR__ . '/../');
             $zip->close();
             echo "Ekstrak berhasil. ";
+            
+            // Hapus cache Laravel agar membaca route & config terbaru
+            $cacheFiles = glob(__DIR__ . '/../bootstrap/cache/*.php');
+            foreach($cacheFiles as $file){
+                if(basename($file) !== '.gitignore') {
+                    @unlink($file);
+                }
+            }
+            
+            // Jalankan Migrasi Database Otomatis
+            try {
+                require __DIR__.'/../vendor/autoload.php';
+                $app = require_once __DIR__.'/../bootstrap/app.php';
+                $kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
+                $kernel->bootstrap();
+                \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+                echo "Migrasi Selesai: " . \Illuminate\Support\Facades\Artisan::output();
+            } catch (\Exception $e) {
+                echo "Gagal migrasi: " . $e->getMessage();
+            }
+
         } else {
             echo "Gagal membuka file ZIP. ";
             http_response_code(500);
