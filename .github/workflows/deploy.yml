@@ -38,7 +38,6 @@ jobs:
           **/.git*
           **/.git*/**
           **/node_modules/**
-          **/vendor/**
           **/tests/**
           **/deploy_dist/**
           storage/framework/cache/**
