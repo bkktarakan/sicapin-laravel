@@ -4,8 +4,11 @@ $app = require_once __DIR__.'/../bootstrap/app.php';
 $kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
 $kernel->bootstrap();
 try {
-    \Illuminate\Support\Facades\Artisan::call('migrate:status');
-    echo "Status Migrasi: \n" . \Illuminate\Support\Facades\Artisan::output();
+    $migrations = \Illuminate\Support\Facades\DB::table('migrations')->get();
+    echo "Migrations in DB:\n";
+    foreach($migrations as $m) {
+        echo $m->migration . "\n";
+    }
 } catch (\Exception $e) {
-    echo "Gagal migrasi: " . $e->getMessage();
+    echo "Gagal: " . $e->getMessage();
 }
