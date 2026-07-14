@@ -42,7 +42,10 @@
       "Bash(gh auth *)",
       "Bash(gh repo *)",
       "Bash(gh secret *)",
-      "Bash(gh run *)"
+      "Bash(gh run *)",
+      "Bash(git fetch *)",
+      "PowerShell(gh run list --workflow=deploy.yml --limit 5)",
+      "WebFetch(domain:github.com)"
     ]
   }
 }
