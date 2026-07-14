@@ -26,26 +26,45 @@ jobs:
         npm ci
         npm run build
 
-    - name: 📂 Sync files via FTP
+    - name: 📦 Prepare Deployment Files (ZIP)
+      run: |
+        # Buat file unzipper
+        cat << 'EOF' > unzip.php
+        <?php
+        $zip = new ZipArchive;
+        if ($zip->open('release.zip') === TRUE) {
+            $zip->extractTo(__DIR__);
+            $zip->close();
+            echo "Ekstrak berhasil. ";
+        } else {
+            echo "Gagal membuka file ZIP. ";
+            http_response_code(500);
+        }
+        // Hapus jejak
+        @unlink('release.zip');
+        @unlink(__FILE__);
+        ?>
+        EOF
+        
+        # Zip semua file (kecuali folder git dan file rahasia)
+        zip -r release.zip . -x ".git/*" ".github/*" "node_modules/*" "tests/*" "storage/framework/cache/*"
+        
+        # Pindahkan ke folder kosong agar FTP hanya mengirim 2 file ini
+        mkdir deploy_dist
+        mv release.zip deploy_dist/
+        mv unzip.php deploy_dist/
+
+    - name: 📂 Sync files via FTP (Hanya 2 File)
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
         server: ${{ secrets.FTP_SERVER }}
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
-        # Karena akun FTP Hostinger sudah mengarah ke public_html, kita set server-dir ke root FTP (./)
         server-dir: ./
-        exclude: |
-          **/.git*
-          **/.git*/**
-          **/.github/**
-          **/node_modules/**
-          **/tests/**
-          .env
-          .env.example
-          .env.backup
-          .env.production
-          storage/app/**
-          storage/framework/**
-          storage/logs/**
-          storage/pail/**
-          public/storage
+        local-dir: ./deploy_dist/
+
+    - name: 🚀 Ekstrak file di Hosting
+      run: |
+        # Memanggil file PHP di hosting untuk mengekstrak ZIP
+        # Ganti URL ini jika nama domain Anda berbeda
+        curl -sL "https://sicapin.bkktarakan.id/unzip.php"
