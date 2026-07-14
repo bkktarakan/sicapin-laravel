@@ -26,88 +26,26 @@ jobs:
         npm ci
         npm run build
 
-    - name: 📦 Prepare Deployment Files (ZIP)
-      run: |
-        # Buat file unzipper di dalam folder public
-        cat << 'EOF' > public/extract.php
-        <?php
-        ini_set('display_errors', 1);
-        ini_set('display_startup_errors', 1);
-        error_reporting(E_ALL);
-
-        $zip = new ZipArchive;
-        if ($zip->open(__DIR__ . '/../release.zip') === TRUE) {
-            $zip->extractTo(__DIR__ . '/../');
-            $zip->close();
-            echo "Ekstrak berhasil. ";
-            
-            // Hapus cache Laravel agar membaca route & config terbaru
-            $cacheFiles = glob(__DIR__ . '/../bootstrap/cache/*.php');
-            foreach($cacheFiles as $file){
-                if(basename($file) !== '.gitignore') {
-                    @unlink($file);
-                }
-            }
-            
-            // Jalankan Migrasi Database Otomatis
-            try {
-                require __DIR__.'/../vendor/autoload.php';
-                $app = require_once __DIR__.'/../bootstrap/app.php';
-                $kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
-                $kernel->bootstrap();
-                
-                // Pastikan kolom aktif benar-benar ada (karena mungkin migration nyangkut)
-                try {
-                    \Illuminate\Support\Facades\DB::statement("ALTER TABLE pegawai ADD COLUMN aktif TINYINT(1) NOT NULL DEFAULT 1 AFTER level");
-                    echo "Kolom aktif berhasil ditambahkan ke tabel pegawai! ";
-                } catch (\Throwable $e) {
-                    echo "Kolom aktif sudah ada atau gagal ditambahkan (Aman). ";
-                }
-
-                \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
-                echo "Migrasi Selesai: " . \Illuminate\Support\Facades\Artisan::output();
-            } catch (\Throwable $e) {
-                echo "Gagal migrasi: " . $e->getMessage();
-            }
-
-        } else {
-            echo "Gagal membuka file ZIP. ";
-          // Jangan hapus file ini agar sinkronisasi FTP tidak rusak
-        }
-        
-        echo "Cek ENV: " . (file_exists(__DIR__ . '/../.env') ? "ADA" : "TIDAK ADA") . "<br>";
-        
-        $logFile = __DIR__ . '/../storage/logs/laravel.log';
-        if (file_exists($logFile)) {
-            $logLines = file($logFile);
-            $lastLines = array_slice($logLines, -50);
-            echo "<h3>Log Error Terakhir:</h3><pre>" . htmlspecialchars(implode("", $lastLines)) . "</pre>";
-        } else {
-            echo "File log tidak ditemukan.";
-        }
-        // Hash trigger: v3
-        ?>
-        EOF
-        
-        # Zip semua file (kecuali folder git dan file rahasia)
-        zip -r release.zip . -x ".git/*" ".github/*" "node_modules/*" "tests/*" "storage/framework/cache/*"
-        
-        # Pindahkan ke folder kosong agar FTP hanya mengirim 2 file ini sesuai struktur
-        mkdir -p deploy_dist/public
-        mv release.zip deploy_dist/
-        mv public/extract.php deploy_dist/public/
-
-    - name: 📂 Sync files via FTP (Hanya 2 File)
+    - name: 📂 Sync files via FTP
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
         server: ${{ secrets.FTP_SERVER }}
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         server-dir: ./
-        local-dir: ./deploy_dist/
+        local-dir: ./
+        exclude: |
+          **/.git*
+          **/.git*/**
+          **/node_modules/**
+          **/vendor/**
+          **/tests/**
+          **/deploy_dist/**
+          storage/framework/cache/**
+          storage/framework/views/**
+          storage/framework/sessions/**
 
-    - name: 🚀 Ekstrak file di Hosting
+    - name: 🚀 Jalankan Migrasi di Hosting
       run: |
-        # Memanggil file PHP di hosting untuk mengekstrak ZIP
-        # Ganti URL ini jika nama domain Anda berbeda
-        curl -sL "https://sicapin.bkktarakan.id/public/extract.php"
+        # Memanggil file PHP di hosting untuk menjalankan migrasi
+        curl -sL "https://sicapin.bkktarakan.id/public/migrate.php"
