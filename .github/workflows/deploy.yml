@@ -51,6 +51,15 @@ jobs:
                 $app = require_once __DIR__.'/../bootstrap/app.php';
                 $kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
                 $kernel->bootstrap();
+                
+                // Pastikan kolom aktif benar-benar ada (karena mungkin migration nyangkut)
+                try {
+                    \Illuminate\Support\Facades\DB::statement("ALTER TABLE pegawai ADD COLUMN aktif TINYINT(1) NOT NULL DEFAULT 1 AFTER level");
+                    echo "Kolom aktif berhasil ditambahkan ke tabel pegawai! ";
+                } catch (\Exception $e) {
+                    echo "Kolom aktif sudah ada atau gagal ditambahkan (Aman). ";
+                }
+
                 \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
                 echo "Migrasi Selesai: " . \Illuminate\Support\Facades\Artisan::output();
             } catch (\Exception $e) {
@@ -61,9 +70,7 @@ jobs:
             echo "Gagal membuka file ZIP. ";
             http_response_code(500);
         }
-        // Hapus jejak
-        @unlink(__DIR__ . '/../release.zip');
-        @unlink(__FILE__);
+        // Jangan hapus file ini agar sinkronisasi FTP tidak rusak
         ?>
         EOF
         
