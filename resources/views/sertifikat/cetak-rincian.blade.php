@@ -4,7 +4,7 @@
     <style>
         @page { size: legal landscape; margin: 10mm; }
         body { font-family: Arial, sans-serif; font-size: 8px; }
-        table { border-collapse: collapse; width: 100%; margin-top: 10px; table-layout: fixed; word-wrap: break-word; }
+        table { border-collapse: collapse; width: 100%; margin-top: 10px; table-layout: fixed; }
         th, td { border: 1px solid #333; padding: 2px; overflow: hidden; }
         th { background-color: #f0f0f0; text-align: center; font-size: 7px; }
         td { text-align: center; font-size: 7px; }

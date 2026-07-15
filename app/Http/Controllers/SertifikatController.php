@@ -671,19 +671,23 @@ class SertifikatController extends Controller
      */
     public function cetakRincianPdf(Request $request)
     {
-        ini_set('memory_limit', '512M');
-        ini_set('max_execution_time', '300');
-        
-        $tahun = session('tahun', date('Y'));
-        $periode = $request->get('periode', 'tahunan');
-        $periodeLabel = $this->getPeriodeLabel($periode);
-        $jenisPelatihan = $this->getJenisPelatihan();
+        try {
+            ini_set('memory_limit', '512M');
+            ini_set('max_execution_time', '300');
+            
+            $tahun = session('tahun', date('Y'));
+            $periode = $request->get('periode', 'tahunan');
+            $periodeLabel = $this->getPeriodeLabel($periode);
+            $jenisPelatihan = $this->getJenisPelatihan();
 
-        $data = $this->getRincianByPeriode($tahun, $periode);
+            $data = $this->getRincianByPeriode($tahun, $periode);
 
-        $pdf = Pdf::loadView('sertifikat.cetak-rincian', compact('data', 'tahun', 'jenisPelatihan', 'periodeLabel'));
-        $pdf->setPaper('legal', 'landscape');
-        return $pdf->download('Rincian_JPL_' . $tahun . '_' . $periode . '.pdf');
+            $pdf = Pdf::loadView('sertifikat.cetak-rincian', compact('data', 'tahun', 'jenisPelatihan', 'periodeLabel'));
+            $pdf->setPaper('legal', 'landscape');
+            return $pdf->download('Rincian_JPL_' . $tahun . '_' . $periode . '.pdf');
+        } catch (\Throwable $e) {
+            return response('Error generating PDF: ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine(), 500);
+        }
     }
 
     /**
@@ -1044,20 +1048,23 @@ class SertifikatController extends Controller
         $pegawaiList = Pegawai::aktif()->orderBy('nama', 'asc')->get();
         $jenisPelatihan = $this->getJenisPelatihan();
 
+        $sertifikatQuery = Sertifikat::where('tahun', $tahun)
+            ->where('status', 'approved');
+
+        if ($dateRange) {
+            $sertifikatQuery->whereBetween('tanggal', $dateRange);
+        }
+
+        $semuaSertifikat = $sertifikatQuery->get()->groupBy('pegawai_id');
+
         $data = [];
+        $jenisCount = count($jenisPelatihan);
+        
         foreach ($pegawaiList as $pegawai) {
-            $sertifikatQuery = Sertifikat::where('pegawai_id', $pegawai->id)
-                ->where('tahun', $tahun)
-                ->where('status', 'approved');
+            $sertifikatList = $semuaSertifikat->get($pegawai->id, collect());
 
-            if ($dateRange) {
-                $sertifikatQuery->whereBetween('tanggal', $dateRange);
-            }
-
-            $sertifikatList = $sertifikatQuery->get();
-
-            $jenisCount = count($jenisPelatihan);
             $jplPerJenis = $jenisCount > 0 ? array_fill(0, $jenisCount, 0) : [];
+            
             foreach ($sertifikatList as $sertifikat) {
                 $index = array_search($sertifikat->jenis_pelatihan, $jenisPelatihan);
                 if ($index !== false) {
