@@ -45,7 +45,18 @@
       "Bash(gh run *)",
       "Bash(git fetch *)",
       "PowerShell(gh run list --workflow=deploy.yml --limit 5)",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "PowerShell(gh run list --workflow=deploy.yml --limit 5 2>&1)",
+      "Bash(curl -sL -o /dev/null -w \"HTTP Status: %{http_code}\\\\n\" \"https://sicapin.bkktarakan.id/\" --max-time 15)",
+      "Bash(curl -sL \"https://sicapin.bkktarakan.id/public/migrate.php\" --max-time 20)",
+      "Bash(curl -sL \"https://sicapin.bkktarakan.id/\" --max-time 20)",
+      "Bash(curl -s \"https://api.github.com/repos/bkktarakan/sicapin-laravel/actions/runs?per_page=3\" --max-time 20)",
+      "Bash(curl -sL \"https://sicapin.bkktarakan.id/\" --max-time 20 -o /tmp_body.html -w \"HTTP Status: %{http_code}\\\\n\")",
+      "Bash(head -c 2000 /tmp_body.html)",
+      "Bash(cat /tmp_body.html)",
+      "Bash(curl -sL \"https://sicapin.bkktarakan.id/public/migrate.php\" --max-time 30)",
+      "Bash(curl -sL \"https://sicapin.bkktarakan.id/\" --max-time 20 -o /dev/null -w \"HTTP Status: %{http_code}\\\\n\")",
+      "Bash(curl -sL \"https://sicapin.bkktarakan.id/sertifikat/cetak-rincian?periode=tahunan\" --max-time 20 -w \"\\\\nHTTP_CODE:%{http_code}\\\\n\")"
     ]
   }
 }

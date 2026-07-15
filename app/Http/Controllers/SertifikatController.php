@@ -653,6 +653,8 @@ class SertifikatController extends Controller
      */
     public function cetakPdf(Request $request)
     {
+        ini_set('memory_limit', '512M');
+        ini_set('max_execution_time', '300');
         $tahun = session('tahun', date('Y'));
         $periode = $request->get('periode', 'tahunan');
         $periodeLabel = $this->getPeriodeLabel($periode);
@@ -669,6 +671,9 @@ class SertifikatController extends Controller
      */
     public function cetakRincianPdf(Request $request)
     {
+        ini_set('memory_limit', '512M');
+        ini_set('max_execution_time', '300');
+        
         $tahun = session('tahun', date('Y'));
         $periode = $request->get('periode', 'tahunan');
         $periodeLabel = $this->getPeriodeLabel($periode);
@@ -1103,6 +1108,8 @@ class SertifikatController extends Controller
 
     public function cetakJenisPdf(Request $request)
     {
+        ini_set('memory_limit', '512M');
+        ini_set('max_execution_time', '300');
         $tahun = session('tahun', date('Y'));
         $periode = $request->get('periode', 'tahunan');
         $periodeLabel = $this->getPeriodeLabel($periode);
